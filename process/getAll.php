@@ -1,16 +1,16 @@
 <?php 
 $directioncache = "../cache/cache.html";
-$name = $_GET['name'];
 $cacheopen = fopen($directioncache, "r+");
 $read = file_get_contents($directioncache);
-$result;
+$res = [];
 $data = json_decode($read);
 foreach($data as $i => $val) {
-		if($val[1] == $name) {
-			$result = $val;
-			break;
-		}
+	if($i >= 1) {
+		
+		$res[] = $val;
+	}
 }
-$json = json_encode($result);
+
+$json = json_encode($res);
 print_r($json);
  ?>

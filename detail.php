@@ -22,21 +22,12 @@
 	</div>
 	<div class="row">
 		<div class="col-md-3">
-			<div class="dropdown">
-			  <button class="btn btn-default dropdown-toggle" type="button" id="companyName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-			    Select Company Name (CMGUnmaskedName)
-			    <span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-			    <li><a href="#">Action</a></li>
-			    <li><a href="#">Another action</a></li>
-			    <li><a href="#">Something else here</a></li>
-			    <li><a href="#">Separated link</a></li>
-			  </ul>
-			</div>
+			<select class="form-control" id="cmgunmaskedname">
+				<option>Select Company Name (CMGUnmaskedName)</option>
+			</select>
 		</div>
 		<div class="col-md-2">
-			<button class="btn btn-primary">Submit</button>
+			<button class="btn btn-primary" onclick="getCompanyName()">Submit</button>
 		</div>
 	</div>
 </div>
@@ -118,8 +109,11 @@
 					<th>Com_Avg_Act_FY15</th>
 				</tr>
 				</thead>
-				<tbody id="gridDetail"></tbody>
+				<tbody id="gridDetail">
+					
+				</tbody>
 			</table>
+			<button class="btn btn-primary">Re-submit</button>
 		</div>
 	</div>
 </div>
@@ -128,36 +122,54 @@
 <script type="text/javascript" src="asset/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="asset/js/chart.min.js"></script>
 <script type="text/javascript">
+	var ROEArray = []
 	$.ajax({
-		url: "process/findById.php",
-		method: "GET",
-		data: {
-			id: '<?php echo $_GET['id']; ?>',
-			start: '<?php echo $_GET['start']; ?>',
-			end: '<?php echo $_GET['end']; ?>'
-		},
+		url: "process/getAll.php",
+		method: 'GET',
 		dataType: 'json',
 		success: function(data, status) {
-			var gridDetail = $("#gridDetail")
-			gridDetail.empty()
-			console.log(data)
-			var tr = $("<tr></tr>").appendTo(gridDetail)
+			var cmgunmaskedname = $("#cmgunmaskedname")
 
-			$("<td></td>").html("<b>"+data[25]+"</b>").appendTo(tr)
-			$("<td></td>").html("<b>"+data[26]+"</b>").appendTo(tr)
-			$("<td></td>").html("<b>"+data[10]+"</b>").appendTo(tr)
-			$("<td></td>").html("<b>"+data[11]+"</b>").appendTo(tr)
-			$("<td></td>").html("<b>"+data[18]+"</b>").appendTo(tr)
-			$("<td></td>").html("<b>"+data[17]+"</b>").appendTo(tr)
-			$("<td></td>").html("<b>"+data[14]+"</b>").appendTo(tr)
-			$("<td></td>").html("<b>"+data[15]+"</b>").appendTo(tr)
-			$("<td></td>").html("<b>"+data[23]+"</b>").appendTo(tr)
-			$("<td></td>").html("<b>"+data[24]+"</b>").appendTo(tr)
+			$.each(data, function(i, val) {
+				$("<option value='"+val[1]+"'>"+val[1]+"</option>").appendTo(cmgunmaskedname)
+			})
 		},
 		error: function(data, status) {
-			console.log(data, status)
+
 		}
 	})
+
+	function getCompanyName() {
+		var name = $("#cmgunmaskedname").val()
+		$.ajax({
+			url: "process/findById.php",
+			method: "GET",
+			data: {
+				name: name
+			},
+			dataType: 'json',
+			success: function(data, status) {
+				var gridDetail = $("#gridDetail")
+				gridDetail.empty()
+				ROEArray = [parseFloat(data[25]), parseFloat(data[26])]
+				var tr = $("<tr></tr>").appendTo(gridDetail)
+
+				$("<td></td>").html("<b>"+data[25]+"</b>").appendTo(tr)
+				$("<td></td>").html("<b>"+data[26]+"</b>").appendTo(tr)
+				$("<td></td>").html("<b>"+data[10]+"</b>").appendTo(tr)
+				$("<td></td>").html("<b>"+data[11]+"</b>").appendTo(tr)
+				$("<td></td>").html("<b>"+data[18]+"</b>").appendTo(tr)
+				$("<td></td>").html("<b>"+data[17]+"</b>").appendTo(tr)
+				$("<td></td>").html("<b>"+data[14]+"</b>").appendTo(tr)
+				$("<td></td>").html("<b>"+data[15]+"</b>").appendTo(tr)
+				$("<td></td>").html("<b>"+data[23]+"</b>").appendTo(tr)
+				$("<td></td>").html("<b>"+data[24]+"</b>").appendTo(tr)
+			},
+			error: function(data, status) {
+				console.log(data, status)
+			}
+		})
+	}
 	var dataChart = {
 		'chartROE' : document.getElementById("chartROE").getContext('2d'),
 		'chartRevenue' : document.getElementById("chartRevenue").getContext('2d'),

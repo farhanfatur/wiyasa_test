@@ -20,41 +20,26 @@
 			<h4>E-Commerse Banking</h4>
 		</div>
 	</div>
-	<?php
-	
-	?>
+	<div class="row">
+		<div class="col-md-3">
+			<button class="btn btn-primary" onclick="window.location.href='detail.php'">Detail</button>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-md-4">
-			<div class="dropdown">
-			  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-			    Select for CMGUnmaskedName
-			    <span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="cmgunmaskedname">
-			    <!-- <li><a href="#">Action</a></li> -->
-			  </ul>
-			</div>
+			  <select class="form-control" id="cmgunmaskedname" onchange="findPage(this.value)">
+			    <option>Select for CMGUnmaskedName</option>
+			  </select>
 		</div>
 		<div class="col-md-4">
-			<div class="dropdown">
-			  <button class="btn btn-default dropdown-toggle" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-			    Select for ClientTier
-			    <span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="clienttier">
-			    
-			  </ul>
-			</div>
+			<select class="form-control" id="clienttier" onchange="findPage(this.value)">
+				<option>Select for Client Tier</option>
+			</select>
 		</div>
 		<div class="col-md-4">
-			<div class="dropdown">
-			  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-			    Select for CMGSegmentName
-			    <span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="cmgsegmentname">
-			  </ul>
-			</div>
+			<select class="form-control" id="cmgsegmentname" onchange="findPage(this.value)">
+				<option>Select for CMGSegmentName</option>
+			</select>
 		</div>
 	</div>
 	<div class="row">
@@ -112,10 +97,11 @@
 <script type="text/javascript" src="asset/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	var cache = []
+	var dataResult
 	var dataPaging
 	function getPaging(index) {
 		var data = dataPaging[index]
-
+		
 		var body = $("#body").empty()
 		
 			$.each(data, function(i, val) {
@@ -148,7 +134,47 @@
 				$("<td></td>").html(val[25]).appendTo(tr)
 				$("<td></td>").html(val[26]).appendTo(tr)
 			})
+// kucingkuluculoh		
+	}
+
+	function findPage(index) {
+		var body = $("#body").empty()
 		
+		$.each(dataResult, function(i, val) {
+			if(val.indexOf(index) > -1) {
+				var tr = $("<tr></tr>").appendTo(body)
+				$('<td><a href="#">'+val[0]+'</a></td>').appendTo(tr)
+				$("<td></td>").html(val[1]).appendTo(tr)
+				$("<td></td>").html(val[2]).appendTo(tr)
+				$("<td></td>").html(val[3]).appendTo(tr)
+				$("<td></td>").html(val[4]).appendTo(tr)
+				$("<td></td>").html(val[5]).appendTo(tr)
+				$("<td></td>").html(val[6]).appendTo(tr)
+				$("<td></td>").html(val[7]).appendTo(tr)
+				$("<td></td>").html(val[8]).appendTo(tr)
+				$("<td></td>").html(val[9]).appendTo(tr)
+				$("<td></td>").html(val[10]).appendTo(tr)
+				$("<td></td>").html(val[11]).appendTo(tr)
+				$("<td></td>").html(val[12]).appendTo(tr)
+				$("<td></td>").html(val[13]).appendTo(tr)
+				$("<td></td>").html(val[14]).appendTo(tr)
+				$("<td></td>").html(val[15]).appendTo(tr)
+				$("<td></td>").html(val[16]).appendTo(tr)
+				$("<td></td>").html(val[17]).appendTo(tr)
+				$("<td></td>").html(val[18]).appendTo(tr)
+				$("<td></td>").html(val[19]).appendTo(tr)
+				$("<td></td>").html(val[20]).appendTo(tr)
+				$("<td></td>").html(val[21]).appendTo(tr)
+				$("<td></td>").html(val[22]).appendTo(tr)
+				$("<td></td>").html(val[23]).appendTo(tr)
+				$("<td></td>").html(val[24]).appendTo(tr)
+				$("<td></td>").html(val[25]).appendTo(tr)
+				$("<td></td>").html(val[26]).appendTo(tr)
+				return false
+			}
+		})
+
+
 	}
 
 	$(function() {
@@ -174,14 +200,14 @@
 					}
 				})
 
-				var cmgunmaskedname = $("#cmgunmaskedname").empty()
-				var clienttier = $("#clienttier").empty()
-				var cmgsegmentname = $("#cmgsegmentname").empty()
-
+				var cmgunmaskedname = $("#cmgunmaskedname")
+				var clienttier = $("#clienttier")
+				var cmgsegmentname = $("#cmgsegmentname")
+				dataResult = cache.result
 				$.each(cache.result, function(i, val) {
-					$('<li><a href="#" onclick="getPaging("'+val[0]+'")">'+val[1]+'</a></li>').appendTo(cmgunmaskedname)
-					$('<li><a href="#" onclick="getPaging("'+val[0]+'")">'+val[2]+'</a></li>').appendTo(clienttier)
-					$('<li><a href="#" onclick="getPaging("'+val[0]+'")">'+val[6]+'</a></li>').appendTo(cmgsegmentname)
+					$('<option value="'+val[1]+'">'+val[1]+'</option>').appendTo(cmgunmaskedname)
+					$('<option value="'+val[2]+'">'+val[2]+'</option>').appendTo(clienttier)
+					$('<option value="'+val[6]+'">'+val[6]+'</option>').appendTo(cmgsegmentname)
 				})
 
 				$.each(cache.data, function(i, val) {

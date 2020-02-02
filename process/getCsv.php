@@ -14,23 +14,31 @@ if(empty($read)) {
 	fwrite($cacheopen, json_encode($array));
 	$dataPaging = array_chunk($array, 20);
 	$result = [];
+	$allData = [];
 	foreach($array as $i => $val) {
+		if($i > 0) {
+			$allData[] = $val;
+		}
+		if($i >= $start && $i <= $end) {
+			$result[] = $val;
+		}
+	}
+	print_r(json_encode(array("data" => $result, "paging" => $dataPaging, 'result' => $allData)));
+}else {
+	$result = [];
+	$dataDecode = json_decode($read);
+	$dataPaging = array_chunk($dataDecode, 20);
+	$allData = [];
+	foreach($dataDecode as $i => $val) {
+		if($i > 0) {
+			$allData[] = $val;
+		}
 
 		if($i >= $start && $i <= $end) {
 			$result[] = $val;
 		}
 	}
-	print_r(json_encode(array("data" => $result, "paging" => $dataPaging, 'result' => $array)));
-}else {
-	$result = [];
-	$dataDecode = json_decode($read);
-	$dataPaging = array_chunk($dataDecode, 20);
-	foreach($dataDecode as $i => $val) {
-		if($i >= $start && $i <= $end) {
-			$result[] = $val;
-		}
-	}
-	print_r(json_encode(array("data" => $result, "paging" => $dataPaging, 'result' => $dataDecode)));
+	print_r(json_encode(array("data" => $result, "paging" => $dataPaging, 'result' => $allData)));
 }
 ?>
 
