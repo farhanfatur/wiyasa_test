@@ -10,7 +10,7 @@
 <nav class="navbar navbar-inverse" style="border-radius: 0px;">
 	<div class="container-fluid">
 	  <div class="navbar-header">
-	    <a class="navbar-brand" href="#" style="color: #fff;">EACIIT</a>
+	    <a class="navbar-brand" href="index.php" style="color: #fff;">EACIIT</a>
 	  </div>
 	</div>
 </nav>
@@ -110,7 +110,9 @@
 				</tr>
 				</thead>
 				<tbody id="gridDetail">
-					
+					<tr>
+						<td colspan="10"><center>Data is Empty</center></td>
+					</tr>
 				</tbody>
 			</table>
 			<button class="btn btn-primary">Re-submit</button>
@@ -122,7 +124,7 @@
 <script type="text/javascript" src="asset/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="asset/js/chart.min.js"></script>
 <script type="text/javascript">
-	var ROEArray = []
+
 	$.ajax({
 		url: "process/getAll.php",
 		method: 'GET',
@@ -151,7 +153,7 @@
 			success: function(data, status) {
 				var gridDetail = $("#gridDetail")
 				gridDetail.empty()
-				ROEArray = [parseFloat(data[25]), parseFloat(data[26])]
+				
 				var tr = $("<tr></tr>").appendTo(gridDetail)
 
 				$("<td></td>").html("<b>"+data[25]+"</b>").appendTo(tr)
@@ -164,97 +166,102 @@
 				$("<td></td>").html("<b>"+data[15]+"</b>").appendTo(tr)
 				$("<td></td>").html("<b>"+data[23]+"</b>").appendTo(tr)
 				$("<td></td>").html("<b>"+data[24]+"</b>").appendTo(tr)
+
+				var dataChart = {
+					'chartROE' : document.getElementById("chartROE").getContext('2d'),
+					'chartRevenue' : document.getElementById("chartRevenue").getContext('2d'),
+					'chartTotalLimitEOP' : document.getElementById("chartTotalLimitEOP").getContext('2d'),
+					'chartCompanyAverage': document.getElementById("chartCompanyAverage").getContext('2d')
+				}
+
+				var chart = {
+					chartROE: new Chart(dataChart.chartROE, {
+						type: 'pie',
+						data: {
+							labels: ["ROE FY14", "ROE FY15"],
+							datasets: [{
+								data: [parseInt(data[25]), parseInt(data[26])],
+								backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+								'rgba(54, 162, 235, 0.2)'
+								],
+								borderColor: [
+								'rgba(255,99,132,1)',
+								'rgba(54, 162, 235, 1)'
+								],
+								borderWidth: 1
+							}]
+						},
+					}),
+					chartRevenue: new Chart(dataChart.chartRevenue, {
+						type: 'bar',
+						data: {
+							labels: ["RWA FY14", "REVENUE FY14", "RWA FY15", "REVENYE FY15X",],
+							datasets: [{
+								label: '# of Votes',
+								data: [parseFloat(data[18]), parseFloat(data[10]), parseFloat(data[17]), parseFloat(data[11])],
+								backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+								'rgba(240, 74, 110, 0.2)',
+								'rgba(54, 162, 235, 0.2)',
+								'rgba(43, 153, 227, 0.2)'
+								],
+								borderColor: [
+								'rgba(255,99,132,1)',
+								'rgba(232, 65, 101, 1)',
+								'rgba(54, 162, 235, 1)',
+								'rgba(36, 149, 224, 1)'
+								],
+								borderWidth: 1
+							}]
+						},
+						
+					}),
+					chartTotalLimitEOP: new Chart(dataChart.chartTotalLimitEOP, {
+						type: 'line',
+						data: {
+							labels: ["Total Limit EOP FY14", "Total Limit EOP FY15"],
+							datasets: [{
+								label: '# of Votes',
+								data: [parseFloat(data[14]), parseFloat(data[15])],
+								backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+								'rgba(54, 162, 235, 0.2)'
+								],
+								borderColor: [
+								'rgba(255,99,132,1)',
+								'rgba(54, 162, 235, 1)'
+								],
+								borderWidth: 1
+							}]
+						},
+						
+					}),
+					chartCompanyAverage: new Chart(dataChart.chartCompanyAverage, {
+						type: 'horizontalBar',
+						data: {
+							labels: ["Avg Regulatory Capital FY14", "Avg Regulatory Capital FY15"],
+							datasets: [{
+								label: '# of Votes',
+								data: [15, 19],
+								backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+								'rgba(255, 20, 70, 0.2)'
+								],
+								borderColor: [
+								'rgba(255,99,132,1)',
+								'rgba(255, 20, 70, 1)'
+								],
+								borderWidth: 1
+							}]
+						},
+						
+					})
+				}
 			},
 			error: function(data, status) {
 				console.log(data, status)
 			}
-		})
-	}
-	var dataChart = {
-		'chartROE' : document.getElementById("chartROE").getContext('2d'),
-		'chartRevenue' : document.getElementById("chartRevenue").getContext('2d'),
-		'chartTotalLimitEOP' : document.getElementById("chartTotalLimitEOP").getContext('2d'),
-		'chartCompanyAverage': document.getElementById("chartCompanyAverage").getContext('2d')
-	}
-
-	var chart = {
-		chartROE: new Chart(dataChart.chartROE, {
-			type: 'pie',
-			data: {
-				labels: ["Red", "Blue"],
-				datasets: [{
-					data: [12, 19],
-					backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'rgba(54, 162, 235, 0.2)'
-					],
-					borderColor: [
-					'rgba(255,99,132,1)',
-					'rgba(54, 162, 235, 1)'
-					],
-					borderWidth: 1
-				}]
-			},
-		}),
-		chartRevenue: new Chart(dataChart.chartRevenue, {
-			type: 'bar',
-			data: {
-				labels: ["Red", "Blue"],
-				datasets: [{
-					label: '# of Votes',
-					data: [12, 19],
-					backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'rgba(54, 162, 235, 0.2)'
-					],
-					borderColor: [
-					'rgba(255,99,132,1)',
-					'rgba(54, 162, 235, 1)'
-					],
-					borderWidth: 1
-				}]
-			},
-			
-		}),
-		chartTotalLimitEOP: new Chart(dataChart.chartTotalLimitEOP, {
-			type: 'line',
-			data: {
-				labels: ["Red", "Blue"],
-				datasets: [{
-					label: '# of Votes',
-					data: [12, 19],
-					backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'rgba(54, 162, 235, 0.2)'
-					],
-					borderColor: [
-					'rgba(255,99,132,1)',
-					'rgba(54, 162, 235, 1)'
-					],
-					borderWidth: 1
-				}]
-			},
-			
-		}),
-		chartCompanyAverage: new Chart(dataChart.chartCompanyAverage, {
-			type: 'horizontalBar',
-			data: {
-				labels: ["Red", "Blue"],
-				datasets: [{
-					label: '# of Votes',
-					data: [12, 19],
-					backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'rgba(54, 162, 235, 0.2)'
-					],
-					borderColor: [
-					'rgba(255,99,132,1)',
-					'rgba(54, 162, 235, 1)'
-					],
-					borderWidth: 1
-				}]
-			},
-			
 		})
 	}
 	

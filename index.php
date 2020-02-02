@@ -141,6 +141,7 @@
 		var body = $("#body").empty()
 		
 		$.each(dataResult, function(i, val) {
+
 			if(val.indexOf(index) > -1) {
 				var tr = $("<tr></tr>").appendTo(body)
 				$('<td><a href="#">'+val[0]+'</a></td>').appendTo(tr)
@@ -177,7 +178,7 @@
 
 	}
 
-	$(function() {
+	function renderGrid() {
 		$.ajax({
 			url: "process/getCsv.php",
 			method: "GET",
@@ -250,5 +251,9 @@
 				console.log("loading....")
 			}
 		})
+	}
+
+	$(function() {
+		renderGrid()
 	})
 </script>
